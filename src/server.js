@@ -1,24 +1,31 @@
 #!/usr/bin/env node
 
-var express = require('express),
-    http = require('http'),
+var express = require('express'),
+    request = require('request'),
+    bodyParser = require('body-parser'),
+    url = require('url'),
     jwt = require('jsonwebtoken'),
     winston = require('winston'),
-    email = require('./email-service'),
-    epiquery = process.evn.EPIQUERY_URL,
+    templates = process.cwd() + '/templates',
+    email = require('./email-service')(templates + '/login_email.html'),
+    epiquery = process.env.EPIQUERY_URL,
     port = process.env.PORT,
     secret = process.env.JWT_SECRET,
+    apiKey = process.env.API_KEY,
     app = express();
 
 
 winston.setLevels(winston.config.syslog.levels);
-var log = new (winston.Logger)(transports: [
-  new (winston.transports.Console)(level: 'info', timestamp: true)
-]);
+var log = new (winston.Logger)({transports: [
+  new (winston.transports.Console)({level: 'info', timestamp: true})
+]});
 
 
+
+app.use(bodyParser.urlencoded({extended:true}));
 // use Hogan for templating
-app.set('view engine', 'html');    # use .html extension for templates
+app.set('view engine', 'html');    // use .html extension for templates
+app.set('views', templates);
 app.enable('view cache');
 app.enable('trust proxy');
 app.engine('html', require('hogan-express'));
@@ -33,81 +40,116 @@ app.get('/healthy', function(req, res) {
 
 // route "/": Get the form
 app.get('/', function(req, res) {
-  res.render('app', {target: req.params.target}, function(err,html){
+  res.render('login_form', {target: req.params.target, jwt: req.params.jwt}, function(err,html){
     if (err) {
-      log.error('Error rendering view',err));
+      log.error('Error rendering view',err);
       res.status(500);
       res.send();
     }
     else {
       res.send(html);
     }
-  }
+  })
 });
 
 // route "/submit": Validate and handle form submission
 app.post('/submit', function(req, res) {
   // capture form input
   var target = req.body.target;
+  var orig_jwt = req.body.jwt;
   // call epiquery to validate user email
-  var options = {
-    protocal: 'https',
-    method: 'post',
-    host: epiquery,
-    path: '/epiquery/glg-auth/authenticate.mustache'
 
-  };
-  var postData = {
-    email: req.body.email,
-  };
-  var req = http.request( options, function(response) {
-    var output_string,
-        output,
-        res_body = {status:'fail',message:'UNKNOWN_ERROR'};
-    response.on('data', function(chunk) {
-      output_string += chunk;
-    });
-    response.on('end', function() {
+  request.post('https://' + epiquery + '/epistream/' + apiKey  + 'epiquery1/glglive/glg-auth/authenticate.mustache',
+    {form: {email: req.body.email}},
+    function (err, httpResponse, body) {
+      output = {};
+      if (err) {
+        log.error('Error posting to epiquery', err);
+        output.error = 'Unable to post epiquery request';
+        completeAuth(target, output, res, false);
+        return;
+      };
       try {
-        output = JSON.parse(output_string)[0];
+        output = JSON.parse(body)[0];
       }
       catch (err) {
         log.error('Error parsing submitted form values', err);
+        output.error = 'Unable to parse epiquery response';
+        completeAuth(target, output, res, false);
+        return;
       }
-      finally {
-        if (output != null and typeof output != 'undefined') {
-          if (output.error != null && typeof output.error != 'undefined' && output.error != '') {
-            // if invalid, send rejection message
-            res_body = {status:'fail', message: output.error}
-          }
-          else if (output.PERSON_ID != null && typeof output.PERSON_ID != 'undefined' && output.PERSON_ID != '')  {
-            // send success message
-            res_body = {status:'success', message: '', name: output.FIRST_NAME}
-            // set roles based on IDs returned, format and send email with jtw token in link
-            // for now, the only role we support is CM.  In the future, these will have to put in 
-            // an array and then joined.
-            // TODO: need to check for and verify existing jwt, if any.  If it's invalid, check reason. If reason begins with
-            // "jwt token expired at" then reuse the paylod for new token.  Otherwise generate new token from scratch.
-            // TODO: what do we do if there's no target?
-            var payload = {
-              role: (output.COUNCIL_MEMBER_ID != null && typeof output.COUNCIL_MEMBER_ID != undefined && output.COUNCIL_MEMBER_ID != "") ? "cm" : "",
-              id: output.PERSON_ID
+      if (output.error != null && typeof output.error != 'undefined' && output.error != '') {
+        // if invalid, send rejection message
+        completeAuth(target, output, res, false);
+        return;
+      }
+      if (output.PERSON_ID == null || typeof output.PERSON_ID == 'undefined' || output.PERSON_ID == '') {
+        // none of the things we expect to be in the epiquery response are there
+        output.error = 'UNKNOWN ERROR';
+        completeAuth(target, output, res, false);
+        return;
+      }
+      // set roles based on IDs returned, For now, the only role we support is CM.
+      var payload = {
+        role: (output.COUNCIL_MEMBER_ID != null && typeof output.COUNCIL_MEMBER_ID != undefined && output.COUNCIL_MEMBER_ID != "") ? "cm" : "",
+        id: output.PERSON_ID
+      }
+      if (orig_jwt != "") {
+        // If the token is valid or expired then augment the paylod with info from the old token.
+        jwt.verify(orig_jwt, secret, function(err, decoded) {
+          if (err == null || typeof error == 'undefined' || err.name == 'TokenExpiredError') {
+            for (key in Object.keys(decoded.payload)) {
+              if (key != 'role' && key != 'id' && key != 'exp') {
+                payload[key] = decoded.payload[key];
+              }
             }
-            /*
-              var token = jwt.sign(payload, secret);
-            */
           }
-        }
-        res.writeHead(200, {"Content-Type": "application/json"});
-        res.write(JSON.stringify(res_body));
-        res.send();
+          signAndComplete(target, output, res, payload);
+        });
       }
-    });
-  }
+      else {
+        signAndComplete(target, output, res, payload);
+      }
+    }
+  );
 });
+
+var signAndComplete = function(target, output, res, payload) {
+  jwt.sign(payload, secret, {algorithm: "HS256", expiresIn: "1h"}, function(new_jwt) {
+    var emailData = {
+      from: 'membersolutions@glgroup.com',
+      to: output.EMAIL,
+      subject: 'GLG Login'
+    };
+    // TODO: For testing, we're going to hardcode our own emails.  Before deployment, delete the following line:
+    emailData.to = "asegal@glgroup.com,squince@glgroup.com";
+    // TODO: what do we do if there's no target? For now, default to glg.it
+    var email_target = 'https://glg.it';
+    if (target != null && typeof target != 'undefined' && target != '') {
+      target_url = url.parse(target, true);
+      target_url.query.jwt = new_jwt;
+      email_target = url.format(target_url);
+    }
+    var templateData = {
+      jwt: new_jwt,
+      target: email_target,
+      first_name: output.FIRST_NAME,
+      last_name: output.LAST_NAME
+    };
+    email.send(templateData, emailData);
+    completeAuth(target, output, res, true);
+  });
+};
+
+var completeAuth = function(target, output, res, isAuthenticated) {
+  res_body = {status: isAuthenticated ? 'success' : 'error', message: output.error ? output.error : '', name: output.FIRST_NAME}
+  res.writeHead(200, {"Content-Type": "application/json"});
+  res.write(JSON.stringify(res_body));
+  res.send();
+};
 
 var server = app.listen(port, function () {
   var host = server.address().address;
   var port = server.address().port;
   log.info('glg-jwt-auth listening at http://%s:%s', host, port);
-};
+});
