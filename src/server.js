@@ -31,9 +31,9 @@ app.enable('trust proxy');
 app.engine('html', require('hogan-express'));
 
 
-// route "/healthy": Get the form
+// route "/healthy"
 app.get('/healthy', function(req, res) {
-  res.status(500);
+  res.status(200);
   res.send();
 });
 
