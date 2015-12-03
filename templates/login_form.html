@@ -1,14 +1,43 @@
 <!-- {target: req.params.target, jwt: req.params.jwt} -->
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="bower_components/iron-form/iron-form.html">
+    <link rel="import" href="bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html">
+    <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="stylesheet" href="css/app.css">
   </head>
-  <body>
-    <h1>GLG Login Form:</h1>
-    <form action="submit" method="post">
+  <body class="glg-defaults main-container fullbleed layout vertical">
+    <div class="glg-header horizontal layout">
+      <div class="horizontal layout">
+        <span class="glg-header-logo"><a href="//glg.it" target="_blank">GLG</a></span>
+        <span class="glg-red-slash">/</span>
+        <span>Login</span>
+      </div>
+      <div class="info-icon layout horizontal">
+        <a class="title-link" target="_blank" href="https://glg.it/contact/">
+          <iron-icon icon="mail"></iron-icon>
+          <span>Contact Us</span>
+        </a>
+      </div>
+    </div>
+
+    <form action="submit" method="post" is="iron-form" class="layout horizontal">
       <input type="hidden" name="target" value="{{target}}">
       <input type="hidden" name="jwt" value="{{jwt}}">
-      <input type="email" name="email" required>
-      <input type="submit" value="Log In">
+      <div class="layout horizontal flex input-container">
+        <paper-input class="flex" type="email" name="email" label="Email" required></paper-input>
+        <paper-button noink>Log In</paper-button>
+      </div>
     </form>
+
+    <script>
+
+    </script>
   </body>
 </html>

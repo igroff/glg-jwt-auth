@@ -1,0 +1,118 @@
+/*! normalize.css v3.0.0 | MIT License | git.io/normalize */
+
+html {
+-ms-text-size-adjust: 100%;
+-webkit-text-size-adjust: 100%;
+}
+
+@font-face {
+font-family: NHaasGroteskDSW02-15UltTh;
+src: url(fonts/NHaasGroteskDSW02-15UltTh/NHaasGroteskDSW02-15UltTh.eot);
+src: url(fonts/NHaasGroteskDSW02-15UltTh/NHaasGroteskDSW02-15UltTh.eot?#iefix) format("embedded-opentype"),url(fonts/NHaasGroteskDSW02-15UltTh/NHaasGroteskDSW02-15UltTh.woff) format("woff"),url(fonts/NHaasGroteskDSW02-15UltTh/NHaasGroteskDSW02-15UltTh.ttf) format("truetype"),url(fonts/NHaasGroteskDSW02-15UltTh/NHaasGroteskDSW02-15UltTh.svg#e52b991ea1a73b9e8fb2a9f647ce1fe1) format("svg");
+font-style: normal;
+font-weight: 400;
+}
+@font-face {
+font-family: NHaasGroteskDSStd-25Th;
+src: url(fonts/NHaasGroteskDSStd-25Th/NHaasGroteskDSStd-25Th.eot);
+src: url(fonts/NHaasGroteskDSStd-25Th/NHaasGroteskDSStd-25Th.eot?#iefix) format("embedded-opentype"),url(fonts/NHaasGroteskDSStd-25Th/NHaasGroteskDSStd-25Th.woff) format("woff"),url(fonts/NHaasGroteskDSStd-25Th/NHaasGroteskDSStd-25Th.ttf) format("truetype"),url(fonts/NHaasGroteskDSStd-25Th/NHaasGroteskDSStd-25Th.svg#a6edbb850aba76ea59dba404ea3681c2) format("svg");
+font-style: normal;
+font-weight: 400;
+}
+@font-face {
+font-family: NHaasGroteskDSW02-35XLt;
+src: url(fonts/NHaasGroteskDSW02-35XLt/NHaasGroteskDSW02-35XLt.eot);
+src: url(fonts/NHaasGroteskDSW02-35XLt/NHaasGroteskDSW02-35XLt.eot?#iefix) format("embedded-opentype"),url(fonts/NHaasGroteskDSW02-35XLt/NHaasGroteskDSW02-35XLt.woff) format("woff"),url(fonts/NHaasGroteskDSW02-35XLt/NHaasGroteskDSW02-35XLt.ttf) format("truetype"),url(fonts/NHaasGroteskDSW02-35XLt/NHaasGroteskDSW02-35XLt.svg#b14b9ec1c91f55e07ace8146b8931ecd) format("svg");
+font-style: normal;
+font-weight: 400;
+}
+@font-face {
+font-family: NHaasGroteskDSW02-45Lt;
+src: url(fonts/NHaasGroteskDSW02-45Lt/NHaasGroteskDSW02-45Lt.eot);
+src: url(fonts/NHaasGroteskDSW02-45Lt/NHaasGroteskDSW02-45Lt.eot?#iefix) format("embedded-opentype"),url(fonts/NHaasGroteskDSW02-45Lt/NHaasGroteskDSW02-45Lt.woff) format("woff"),url(fonts/NHaasGroteskDSW02-45Lt/NHaasGroteskDSW02-45Lt.ttf) format("truetype"),url(fonts/NHaasGroteskDSW02-45Lt/NHaasGroteskDSW02-45Lt.svg#b14b9ec1c91f55e07ace8146b8931ecd) format("svg");
+font-style: normal;
+font-weight: 400;
+}
+@font-face {
+font-family: NHaasGroteskDSW02-55Rg;
+src: url(fonts/NHaasGroteskDSW02-55Rg/NHaasGroteskDSW02-55Rg.eot);
+src: url(fonts/NHaasGroteskDSW02-55Rg/NHaasGroteskDSW02-55Rg.eot?#iefix) format("embedded-opentype"),url(fonts/NHaasGroteskDSW02-55Rg/NHaasGroteskDSW02-55Rg.woff) format("woff"),url(fonts/NHaasGroteskDSW02-55Rg/NHaasGroteskDSW02-55Rg.ttf) format("truetype"),url(fonts/NHaasGroteskDSW02-55Rg/NHaasGroteskDSW02-55Rg.svg#140d60db2b75d6e38d6f90e1466908b2) format("svg");
+font-style: normal;
+font-weight: 400;
+}
+@font-face {
+font-family: NHaasGroteskDSW02-Bd;
+src: url(fonts/NHaasGroteskDSW02-Bd/NHaasGroteskDSW02-Bd.eot);
+src: url(fonts/NHaasGroteskDSW02-Bd/NHaasGroteskDSW02-Bd.eot?#iefix) format("embedded-opentype"),url(fonts/NHaasGroteskDSW02-Bd/NHaasGroteskDSW02-Bd.woff) format("woff"),url(fonts/NHaasGroteskDSW02-Bd/NHaasGroteskDSW02-Bd.ttf) format("truetype"),url(fonts/NHaasGroteskDSW02-Bd/NHaasGroteskDSW02-Bd.svg#d0af5dc50d550ce255c6bb258c2a14ae) format("svg");
+font-style: normal;
+font-weight: 400
+}
+@font-face {
+font-family: GLG_PD_131126;
+src: url(fonts/glg-icons/GLG_PD_131126.eot);
+src: url(fonts/glg-icons/GLG_PD_131126.eot?#iefix) format("embedded-opentype"),url(fonts/glg-icons/GLG_PD_131126.ttf) format("truetype"),url(fonts/glg-icons/GLG_PD_131126.woff) format("woff"),url(fonts/glg-icons/GLG_PD_131126.svg#GLG_PD_131126) format("svg");
+font-weight: 400;
+font-style: normal;
+}
+.main-container {
+  padding: 0.5em 2em;
+}
+form {
+  justify-content: center;
+  align-items: center;
+}
+.input-container {
+  min-width: 20em;
+  max-width: 40em;
+}
+paper-button {
+  text-transform: none;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+  padding: 0.5em 0.5em;
+  color: #EA0015;
+  border: 1px solid transparent;
+  align-self: flex-end;
+}
+paper-button:hover {
+  border: 1px solid #EA0015;
+}
+.glg-defaults {
+  font-family: NHaasGroteskDSW02-45Lt,sans-serif;
+}
+.glg-header {
+  font-family: NHaasGroteskDSW02-45Lt,sans-serif;
+  font-size: 1.7em;
+  color: #000;
+  white-space: nowrap;
+  align-items: center;
+}
+.glg-header-logo {
+  font-family: NHaasGroteskDSW02-Bd,sans-serif;
+}
+.glg-header-logo > a {
+  text-decoration: none;
+  color: inherit;
+}
+.glg-red-slash {
+  color: #EA0015;
+  padding: 0em 0.3em;
+}
+.info-icon {
+  margin-left: auto;
+  font-size: 0.5em;
+  align-items: center;
+}
+.info-icon iron-icon {
+  width: 1.4em;
+  padding: 0em 0em 0.2em 0em;
+}
+.info-icon a {
+  text-decoration: none;
+  color: #000;
+}
+.title-link {
+  cursor: hand;
+  cursor: pointer;
+  margin: 0em 1em 0em 0.1em;
+}

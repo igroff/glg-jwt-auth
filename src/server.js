@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 // use Hogan for templating
 app.set('view engine', 'html');    // use .html extension for templates
 app.set('views', templates);
-app.enable('view cache');
+//app.enable('view cache');
 app.enable('trust proxy');
 app.engine('html', require('hogan-express'));
 
@@ -37,6 +37,11 @@ app.get('/healthy', function(req, res) {
   res.send();
 });
 
+// route static stuff
+app.use('/bower_components', express.static('bower_components'));
+app.use('/css', express.static('css'));
+app.use('/fonts', express.static('fonts'));
+app.use('/favicon.ico', express.static('favicon.ico'));
 
 // route "/": Get the form
 app.get('/', function(req, res) {
@@ -58,8 +63,13 @@ app.post('/submit', function(req, res) {
   var target = req.body.target;
   var orig_jwt = req.body.jwt;
   // call epiquery to validate user email
+  var protocal = 'https://';
+  if (process.env.DEV) {
+    protocal = 'http://';
+  }
+  var epiUrl = protocal + epiquery + '/epistream/' + apiKey  + 'epiquery1/glglive/glg-auth/authenticate.mustache'
 
-  request.post('https://' + epiquery + '/epistream/' + apiKey  + 'epiquery1/glglive/glg-auth/authenticate.mustache',
+  request.post(epiUrl,
     {form: {email: req.body.email}},
     function (err, httpResponse, body) {
       output = {};
