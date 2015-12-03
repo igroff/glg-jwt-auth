@@ -1,0 +1,24 @@
+{
+  "name": "glg-jwt-auth",
+  "version": "0.1.0",
+  "homepage": "https://github.com/glg/glg-jwt-auth",
+  "authors": [
+    "Steve Quince",
+    "Amit Segal"
+  ],
+  "description": "How Council Members authenticate",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-elements": "PolymerElements/paper-elements#~1.0.5",
+    "iron-form": "PolymerElements/iron-form#~1.0.9"
+  }
+}
