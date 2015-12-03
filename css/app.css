@@ -57,13 +57,16 @@ font-style: normal;
 .main-container {
   padding: 0.5em 2em;
 }
-form {
+.outer-container {
   justify-content: center;
   align-items: center;
 }
-.input-container {
+.container {
   min-width: 20em;
   max-width: 40em;
+}
+.container > * {
+  padding: 0.5em 0em;
 }
 paper-button {
   text-transform: none;

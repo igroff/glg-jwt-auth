@@ -13,30 +13,112 @@
     <link rel="stylesheet" href="css/app.css">
   </head>
   <body class="glg-defaults main-container fullbleed layout vertical">
-    <div class="glg-header horizontal layout">
-      <div class="horizontal layout">
-        <span class="glg-header-logo"><a href="//glg.it" target="_blank">GLG</a></span>
-        <span class="glg-red-slash">/</span>
-        <span>Login</span>
+    <template id="glgLogin" is="dom-bind">
+      <div class="glg-header horizontal layout">
+        <div class="horizontal layout">
+          <span class="glg-header-logo"><a href="//glg.it" target="_blank">GLG</a></span>
+          <span class="glg-red-slash">/</span>
+          <span>Login</span>
+        </div>
+        <div class="info-icon layout horizontal">
+          <a class="title-link" target="_blank" href="https://glg.it/contact/">
+            <iron-icon icon="mail"></iron-icon>
+            <span>Contact Us</span>
+          </a>
+        </div>
       </div>
-      <div class="info-icon layout horizontal">
-        <a class="title-link" target="_blank" href="https://glg.it/contact/">
-          <iron-icon icon="mail"></iron-icon>
-          <span>Contact Us</span>
-        </a>
-      </div>
-    </div>
 
-    <form action="submit" method="post" is="iron-form" class="layout horizontal">
-      <input type="hidden" name="target" value="{{target}}">
-      <input type="hidden" name="jwt" value="{{jwt}}">
-      <div class="layout horizontal flex input-container">
-        <paper-input class="flex" type="email" name="email" label="Email" required></paper-input>
-        <paper-button noink>Log In</paper-button>
+      <form
+        id="authForm"
+        action="submit"
+        method="post"
+        is="iron-form"
+        class="layout horizontal outer-container"
+        with-credentials="true"
+        content-type="application/x-www-form-urlencoded"
+        on-iron-form-response="authResponseHandler"
+        on-iron-form-error="displayAuthError"
+        >
+        <input type="hidden" name="target" value="{{target}}">
+        <input type="hidden" name="jwt" value="{{jwt}}">
+        <div class="layout horizontal flex container">
+          <paper-input id="emailInput" class="flex" type="email" name="email" label="Email" required></paper-input>
+          <paper-button noink on-click="authMe">Log In</paper-button>
+        </div>
+      </form>
+
+      <div id="authResponseSuccess" class="layout horizontal outer-container" hidden>
+        <div class="layout vertical flex container">
+          <div>
+            <span>[[authUserFirstName]]</span>,
+          </div>
+          <div>
+            You have successfully logged in.
+            We have emailed you a link to proceed and it should arrive momentarily.
+            Please check your email.
+          </div>
+          <div>
+            If you do not receive our email soon, please check your spam messages.
+            Otherwise, feel free to <a href="https://glg.it/contact/">contact us</a>.
+          </div>
+        </div>
       </div>
-    </form>
+
+      <div id="authResponseFail" class="layout horizontal outer-container" hidden>
+        <div class="layout vertical flex container">
+          <div>
+            <span>[[authUserFirstName]]</span>,
+          </div>
+          <div>
+            You have successfully logged in.
+            We have emailed you a link to proceed and it should arrive momentarily.
+            Please check your email.
+          </div>
+          <div>
+            If you do not receive our email soon, please check your spam messages.
+            Otherwise, feel free to <a href="https://glg.it/contact/">contact us</a>.
+          </div>
+        </div>
+      </div>
+
+      <div id="formErrorMsg" class="layout horizontal outer-container" hidden>
+        <div class="flex container">
+          <div>
+            There was an error submitting your email address.  Please try again.
+          </div>
+          <div>
+            If this continues, please feel free to <a href="https://glg.it/contact/">contact us</a>.
+          </div>
+        </div>
+      </div>
+    </template>
 
     <script>
+
+      // possible email validation regular expression
+      //  glgLogin.$.emailInput.allowed-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i"
+
+      glgLogin.authMe = function(evt) {
+        glgLogin.$.authForm.submit();
+      };
+
+      glgLogin.authResponseHandler = function(evt) {
+        // determine what to show
+        if(evt.detail.__data__.response.status == 'error') {
+          glgLogin.authResponseMessage = 'Unable to auth. Refresh and try again';
+          glgLogin.$.authResponseFail.removeAttribute('hidden');
+        } else {
+          glgLogin.authUserFirstName = evt.detail.__data__.response.name;
+          glgLogin.$.authForm.setAttribute('hidden',true);
+          glgLogin.$.authResponseSuccess.removeAttribute('hidden');
+        }
+      };
+
+      glgLogin.displayAuthError = function(err) {
+        glgLogin.$.authForm.setAttribute('hidden',true);
+        glgLogin.$.authResponseSuccess.setAttribute('hidden',true);
+        glgLogin.$.formErrorMsg.removeAttribute('hidden');
+      };
 
     </script>
   </body>
