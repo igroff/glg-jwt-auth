@@ -9,7 +9,7 @@ var log = new (winston.Logger)({transports: [
 ]});
 
 var transporter = nodemailer.createTransport(
-  smtpTransport({port: process.env.SMPT_PORT, host: process.env.SMPT_HOST})
+  smtpTransport({port: process.env.SMTP_PORT, host: process.env.SMTP_HOST})
 );
 
 
