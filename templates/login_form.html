@@ -12,22 +12,22 @@
     <link rel="import" href="bower_components/paper-button/paper-button.html">
     <link rel="stylesheet" href="css/app.css">
   </head>
-  <body class="glg-defaults main-container fullbleed layout vertical">
-    <template id="glgLogin" is="dom-bind">
-      <div class="glg-header horizontal layout">
-        <div class="">
-          <span class="glg-header-logo"><a href="//glg.it" target="_blank">GLG</a></span>
-          <span class="glg-red-slash">/</span>
-          <span>Login</span>
-        </div>
-        <div class="info-icon layout horizontal">
-          <a class="title-link" target="_blank" href="https://glg.it/contact/">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact Us</span>
-          </a>
-        </div>
+  <body class="glg-defaults fullbleed layout vertical">
+    <div class="glg-header horizontal layout">
+      <div class="">
+        <span class="glg-header-logo"><a href="//glg.it" target="_blank">GLG</a></span>
+        <span class="glg-red-slash">/</span>
+        <span>Login</span>
       </div>
+      <div class="info-icon layout horizontal">
+        <a class="title-link" target="_blank" href="https://glg.it/contact/">
+          <iron-icon icon="mail"></iron-icon>
+          <span>Contact Us</span>
+        </a>
+      </div>
+    </div>
 
+    <template id="glgLogin" is="dom-bind">
       <div class="layout horizontal center body-wrapper">
         <div style="margin: auto;">
           <div id="welcome" class="container">
