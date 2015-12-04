@@ -59,14 +59,19 @@ font-style: normal;
 }
 .outer-container {
   justify-content: center;
-  align-items: center;
 }
 .container {
-  min-width: 20em;
-  max-width: 40em;
+  width: 30em;
 }
-.container > * {
+.container > div {
   padding: 0.5em 0em;
+}
+.container p {
+  padding: 0.2em 0em;
+}
+.body-wrapper {
+  height: 90%;
+  max-height: 30em;
 }
 paper-button {
   text-transform: none;
