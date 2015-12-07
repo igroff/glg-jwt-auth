@@ -8,10 +8,9 @@ var express = require('express'),
     winston = require('winston'),
     templates = process.cwd() + '/templates',
     email = require('./email-service')(templates + '/login_email.html'),
-    epiquery = process.env.EPIQUERY_URL,
+    local_epi = process.env.LOCAL_EPIQUERY,
     port = process.env.PORT,
     secret = process.env.JWT_SECRET,
-    apiKey = process.env.API_KEY,
     app = express();
 
 
@@ -62,13 +61,9 @@ app.post('/submit', function(req, res) {
   // capture form input
   var target = req.body.target;
   var orig_jwt = req.body.jwt;
-  // call epiquery to validate user email
-  var protocal = 'https://';
-  if (process.env.DEV) {
-    protocal = 'http://';
-  }
-  var epiUrl = protocal + epiquery + '/epistream/' + apiKey  + 'epiquery1/glglive/glg-auth/authenticate.mustache'
+  var epiUrl = local_epi + 'epiquery1/glglive/glg-auth/authenticate.mustache'
 
+  // call epiquery to validate user email
   request.post(epiUrl,
     {form: {email: req.body.email}},
     function (err, httpResponse, body) {
