@@ -44,7 +44,7 @@ app.use('/favicon.ico', express.static('favicon.ico'));
 
 // route "/": Get the form
 app.get('/', function(req, res) {
-  res.render('login_form', {target: req.params.target, jwt: req.params.jwt}, function(err,html){
+  res.render('login_form', {target: req.query.target, jwt: req.query.jwt}, function(err,html){
     if (err) {
       log.error('Error rendering view',err);
       res.status(500);
