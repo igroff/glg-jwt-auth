@@ -141,7 +141,10 @@ var signAndComplete = function(target, output, res, payload) {
       first_name: output.FIRST_NAME,
       last_name: output.LAST_NAME
     };
-    email.send(templateData, emailData);
+    // TODO: delete line below and uncomment email.send
+    email.log(templateData, emailData);
+    // email.send(templateData, emailData);
+
     completeAuth(target, output, res, true);
   });
 };

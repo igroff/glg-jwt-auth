@@ -24,6 +24,11 @@ module.exports = function(template_name) {
           log.warn('Error Sending Email: ', err);
         }
       });
+    },
+    log: function(templateData, emailData) {
+      emailData.html = compiled.render(templateData);
+      log.info("\n\n" + JSON.stringify(emailData) + "\n\n");
+      log.info("\n\n" + emailData.html + "\n\n");
     }
   }
 };
