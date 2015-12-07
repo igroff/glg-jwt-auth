@@ -120,6 +120,7 @@ app.post('/submit', function(req, res) {
 });
 
 var signAndComplete = function(target, output, res, payload) {
+  var target = target;
   jwt.sign(payload, secret, {algorithm: "HS256", expiresIn: "1h"}, function(new_jwt) {
     var emailData = {
       from: 'membersolutions@glgroup.com',
@@ -130,6 +131,7 @@ var signAndComplete = function(target, output, res, payload) {
     emailData.to = "asegal@glgroup.com,squince@glgroup.com";
     // TODO: what do we do if there's no target? For now, default to glg.it
     var email_target = 'https://glg.it';
+    log.info("target = " + target);
     if (target != null && typeof target != 'undefined' && target != '') {
       target_url = url.parse(target, true);
       target_url.query.jwt = new_jwt;
