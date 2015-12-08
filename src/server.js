@@ -144,7 +144,8 @@ var signAndComplete = function(target, output, res, payload) {
       first_name: output.FIRST_NAME,
       last_name: output.LAST_NAME
     };
-    //email.log(templateData, emailData);
+    // TODO: the following line is for development.  Before deployment, delete the email.log statement
+    email.log(templateData, emailData);
     email.send(templateData, emailData);
 
     completeAuth(target, output, res, true);
