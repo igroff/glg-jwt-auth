@@ -129,11 +129,12 @@ var signAndComplete = function(target, output, res, payload) {
     };
     // TODO: For testing, we're going to hardcode our own emails.  Before deployment, delete the following line:
     emailData.to = "asegal@glgroup.com,squince@glgroup.com";
-    // TODO: what do we do if there's no target? For now, default to glg.it
+    // if there's no target, default to glg.it
     var email_target = 'https://glg.it';
-    log.info("target = " + target);
     if (target != null && typeof target != 'undefined' && target != '') {
-      target_url = url.parse(target, true);
+      var target_url = url.parse(target, true);
+      // url.format will use search if it exists, so null it out to use query instead
+      target_url.search = null;
       target_url.query.jwt = new_jwt;
       email_target = url.format(target_url);
     }
@@ -143,9 +144,8 @@ var signAndComplete = function(target, output, res, payload) {
       first_name: output.FIRST_NAME,
       last_name: output.LAST_NAME
     };
-    // TODO: delete line below and uncomment email.send
-    email.log(templateData, emailData);
-    // email.send(templateData, emailData);
+    //email.log(templateData, emailData);
+    email.send(templateData, emailData);
 
     completeAuth(target, output, res, true);
   });
