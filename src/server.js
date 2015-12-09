@@ -97,14 +97,15 @@ app.post('/submit', function(req, res) {
       // set roles based on IDs returned, For now, the only role we support is CM.
       var payload = {
         role: (output.COUNCIL_MEMBER_ID != null && typeof output.COUNCIL_MEMBER_ID != undefined && output.COUNCIL_MEMBER_ID != "") ? "cm" : "",
-        id: output.PERSON_ID
+        personid: output.PERSON_ID
+        cmid: output.COUNCIL_MEMBER_ID
       }
       if (orig_jwt != "") {
         // If the token is valid or expired then augment the paylod with info from the old token.
         jwt.verify(orig_jwt, secret, function(err, decoded) {
           if (err == null || typeof error == 'undefined' || err.name == 'TokenExpiredError') {
             for (key in Object.keys(decoded.payload)) {
-              if (key != 'role' && key != 'id' && key != 'exp') {
+              if (key != 'role' && key != 'personid' && key != 'cmid' && key != 'exp') {
                 payload[key] = decoded.payload[key];
               }
             }
