@@ -97,7 +97,7 @@ app.post('/submit', function(req, res) {
       // set roles based on IDs returned, For now, the only role we support is CM.
       var payload = {
         role: (output.COUNCIL_MEMBER_ID != null && typeof output.COUNCIL_MEMBER_ID != undefined && output.COUNCIL_MEMBER_ID != "") ? "cm" : "",
-        personid: output.PERSON_ID
+        personid: output.PERSON_ID,
         cmid: output.COUNCIL_MEMBER_ID
       }
       if (orig_jwt != "") {
