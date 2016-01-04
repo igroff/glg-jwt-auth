@@ -124,7 +124,7 @@ var signAndComplete = function(target, output, res, payload) {
   var target = target;
   jwt.sign(payload, secret, {algorithm: "HS256", expiresIn: "1h"}, function(new_jwt) {
     var emailData = {
-      from: 'membersolutions@glgroup.com',
+      from: '"GLG Member Solutions" <membersolutions@glgroup.com>',
       to: output.EMAIL,
       subject: 'GLG Login'
     };
