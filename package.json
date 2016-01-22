@@ -22,15 +22,15 @@
     }
   ],
   "dependencies": {
-    "body-parser": "^1.14.1",
-    "express": "^4.13.3",
-    "hogan-express": "^0.5.2",
-    "hogan.js": "^3.0.2",
-    "jsonwebtoken": "^5.4.1",
-    "nodemailer": "^1.10.0",
-    "nodemailer-smtp-transport": "^1.0.4",
-    "request": "^2.67.0",
-    "winston": "^2.1.1"
+    "body-parser": "1.14.1",
+    "express": "4.13.3",
+    "hogan-express": "0.5.2",
+    "hogan.js": "3.0.2",
+    "jsonwebtoken": "5.4.1",
+    "nodemailer": "1.10.0",
+    "nodemailer-smtp-transport": "1.0.4",
+    "request": "2.67.0",
+    "winston": "2.1.1"
   },
   "devDependencies": {},
   "engines": {
