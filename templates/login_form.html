@@ -39,27 +39,7 @@
           <div id="authResponseSuccess" class="layout horizontal outer-container" hidden>
             <div class="layout vertical flex container">
               <p>
-                <span>[[authUserFirstName]]</span>,
-              </p>
-              <p>
-                 You have successfully logged in.
-                 We have emailed you a link to proceed and it should arrive momentarily.
-                 Please check your email.
-              </p>
-              <p>
-                If you do not receive our email soon, please check your spam messages.
-                Otherwise, feel free to <a href="https://glg.it/contact/">contact us</a>.
-              </p>
-            </div>
-          </div>
-
-          <div id="authResponseFail" class="layout horizontal outer-container" hidden>
-            <div class="layout vertical flex container">
-              <div>
-                <p>We do not recognize that email address.</p>
-                <p>Please verify your email was entered correctly and try again.</p>
-                <p>If you are still unable to log in, feel free to <a href="https://glg.it/contact/">contact us</a>.</p>
-              </div>
+                <span><a href="/echo_jwt?jwt=[[jwt]]">Go</a></span>
             </div>
           </div>
 
@@ -81,15 +61,6 @@
               <paper-button noink on-click="authMe">Log In</paper-button>
             </div>
           </form>
-
-          <div id="formErrorMsg" class="layout horizontal outer-container" hidden>
-            <div class="flex container">
-              <div>
-                <p>There was an error submitting your email address.  Please try again.</p>
-                <p>If this continues, please feel free to <a href="https://glg.it/contact/">contact us</a>.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </template>
@@ -102,32 +73,10 @@
       };
 
       glgLogin.authResponseHandler = function(evt) {
-        // determine what to show
-        if(evt.detail.__data__.response.status == 'error') {
-          //TODO: Might want to hide the form for some error types
-          // and sconditionally show different error messages
-          glgLogin.$.authForm.removeAttribute('hidden');
-          glgLogin.$.authResponseFail.removeAttribute('hidden');
-          glgLogin.$.authResponseSuccess.setAttribute('hidden',true);
-          glgLogin.$.formErrorMsg.setAttribute('hidden',true);
-          glgLogin.$.welcome.setAttribute('hidden',true);
-        } else {
-          glgLogin.authUserFirstName = evt.detail.__data__.response.name;
-          glgLogin.$.authForm.setAttribute('hidden',true);
-          glgLogin.$.authResponseFail.setAttribute('hidden',true);
-          glgLogin.$.authResponseSuccess.removeAttribute('hidden');
-          glgLogin.$.formErrorMsg.setAttribute('hidden',true);
-          glgLogin.$.welcome.setAttribute('hidden',true);
-        }
-      };
-
-      glgLogin.displayAuthError = function(err) {
-        glgLogin.$.authForm.setAttribute('hidden',true);
-        glgLogin.$.authResponseFail.setAttribute('hidden',true);
-        glgLogin.$.authResponseSuccess.setAttribute('hidden',true);
-        glgLogin.$.formErrorMsg.removeAttribute('hidden');
-        glgLogin.$.welcome.setAttribute('hidden',true);
-      };
+        console.log(evt);
+        glgLogin.jwt = evt.detail.__data__.response.jwt
+        glgLogin.$.authResponseSuccess.removeAttribute('hidden');
+      }
 
     </script>
   </body>
