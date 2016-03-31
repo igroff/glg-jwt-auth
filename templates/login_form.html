@@ -13,33 +13,14 @@
     <link rel="stylesheet" href="css/app.css">
   </head>
   <body class="glg-defaults fullbleed layout vertical">
-    <div class="glg-header horizontal layout">
-      <div class="">
-        <span class="glg-header-logo"><a href="//glg.it" target="_blank">GLG</a></span>
-        <span class="glg-red-slash">/</span>
-        <span>Login</span>
-      </div>
-      <div class="info-icon layout horizontal">
-        <a class="title-link" target="_blank" href="https://glg.it/contact/">
-          <iron-icon icon="mail"></iron-icon>
-          <span>Contact Us</span>
-        </a>
-      </div>
-    </div>
-
     <template id="glgLogin" is="dom-bind">
       <div class="layout horizontal center body-wrapper">
         <div style="margin: auto;">
-          <div id="welcome" class="container">
-            <p>Welcome to GLG.</p>
-            <p>Below, please enter the email address you have on record with us.</p>
-            <p>We will send you an email with a link to access the site after verifing your account.</p>
-          </div>
 
           <div id="authResponseSuccess" class="layout horizontal outer-container" hidden>
             <div class="layout vertical flex container">
               <p>
-                <span><a href="/echo_jwt?jwt=[[jwt]]">Go</a></span>
+                <span><a href="[[redirectTo]]?jwt=[[jwt]]">Go</a></span>
             </div>
           </div>
 
@@ -54,7 +35,7 @@
             on-iron-form-response="authResponseHandler"
             on-iron-form-error="displayAuthError"
             >
-            <input type="hidden" name="target" value="{{target}}">
+            <input type="hidden" name="redirectTo" value="{{redirectTo}}">
             <input type="hidden" name="jwt" value="{{jwt}}">
             <div class="layout horizontal flex container">
               <paper-input id="emailInput" class="flex" type="email" name="email" label="Email" required autofocus></paper-input>
@@ -74,7 +55,8 @@
 
       glgLogin.authResponseHandler = function(evt) {
         console.log(evt);
-        glgLogin.jwt = evt.detail.__data__.response.jwt
+        glgLogin.jwt = evt.detail.__data__.response.jwt;
+        glgLogin.redirectTo = evt.detail.__data__.response.redirectTo;
         glgLogin.$.authResponseSuccess.removeAttribute('hidden');
       }
 
