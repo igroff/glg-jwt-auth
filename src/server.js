@@ -10,7 +10,7 @@ var express = require('express'),
     email = require('./email-service')(templates + '/login_email.html'),
     port = process.env.PORT || 3000,
     secret = process.env.JWT_SECRET || 'SecretsAreBad',
-    defaultRedirect = process.env.DEFAULT_REDIRECT,
+    defaultTarget = process.env.DEFAULT_REDIRECT,
     app = express();
 
 
@@ -44,7 +44,7 @@ app.use('/favicon.ico', express.static('favicon.ico'));
 
 // route "/": Get the form
 app.get('/', function(req, res) {
-  res.render('login_form', {redirectTo: req.query.redirectTo || defaultRedirect, jwt: req.query.jwt}, function(err,html){
+  res.render('login_form', {target: req.query.redirectTo || defaultTarget, jwt: req.query.jwt}, function(err,html){
     if (err) {
       log.error('Error rendering view',err);
       res.status(500);
@@ -61,10 +61,10 @@ app.post('/submit', function(req, res) {
   console.log("submit");
   // capture form input
   var orig_jwt = req.body.jwt;
-  var redirectTo = req.body.redirectTo;
-  console.log("redirectTo: " + redirectTo);
+  var target = req.body.redirectTo;
+  console.log("target: " + redirectTo);
 
-  var payload = { role: req.query || "user" };
+  var payload = { role: req.query.role || "user" };
   if (orig_jwt != "") {
     // If the token is valid or expired then augment the paylod with info from the old token.
     jwt.verify(orig_jwt, secret, function(err, decoded) {
@@ -73,25 +73,25 @@ app.post('/submit', function(req, res) {
           payload[key] = decoded.payload[key];
         }
       }
-      signAndComplete(redirectTo, res, payload);
+      signAndComplete(target, res, payload);
     });
   }
   else {
-    signAndComplete(redirectTo, res, payload);
+    signAndComplete(target, res, payload);
   }
 });
 
-var signAndComplete = function(redirectTo, res, payload) {
+var signAndComplete = function(target, res, payload) {
   console.log("signAndComplete");
-  var redirectTo = redirectTo;
+  var target = redirectTo;
   jwt.sign(payload, secret, {algorithm: "HS256", expiresIn: "1h"}, function(new_jwt) {
-    completeAuth(redirectTo, res, true, new_jwt);
+    completeAuth(target, res, true, new_jwt);
   });
 };
 
-var completeAuth = function(redirectTo, res, isAuthenticated, jwt) {
+var completeAuth = function(target, res, isAuthenticated, jwt) {
   console.log("completeAuth");
-  res_body = {status: isAuthenticated ? 'success' : 'error', jwt: jwt, redirectTo: redirectTo}
+  res_body = {status: isAuthenticated ? 'success' : 'error', jwt: jwt, target: redirectTo}
   res.writeHead(200, {"Content-Type": "application/json"});
   res.write(JSON.stringify(res_body));
   res.send();
