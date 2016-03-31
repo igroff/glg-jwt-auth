@@ -10,6 +10,7 @@ var express = require('express'),
     email = require('./email-service')(templates + '/login_email.html'),
     port = process.env.PORT || 3000,
     secret = process.env.JWT_SECRET || 'SecretsAreBad',
+    defaultRedirect = process.env.DEFAULT_REDIRECT,
     app = express();
 
 
@@ -43,7 +44,7 @@ app.use('/favicon.ico', express.static('favicon.ico'));
 
 // route "/": Get the form
 app.get('/', function(req, res) {
-  res.render('login_form', {redirectTo: req.query.redirectTo || "echo_jwt", jwt: req.query.jwt}, function(err,html){
+  res.render('login_form', {redirectTo: req.query.redirectTo || defaultRedirect, jwt: req.query.jwt}, function(err,html){
     if (err) {
       log.error('Error rendering view',err);
       res.status(500);
