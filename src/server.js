@@ -84,6 +84,7 @@ app.post('/submit', function(req, res) {
 var signAndComplete = function(target, res, payload) {
   console.log("signAndComplete");
   var target = target;
+  console.log("payload: " + JSON.stringify(payload));
   jwt.sign(payload, secret, {algorithm: "HS256", expiresIn: "1h"}, function(new_jwt) {
     completeAuth(target, res, true, new_jwt);
   });
