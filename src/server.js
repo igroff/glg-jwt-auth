@@ -44,7 +44,7 @@ app.use('/favicon.ico', express.static('favicon.ico'));
 
 // route "/": Get the form
 app.get('/', function(req, res) {
-  res.render('login_form', {target: req.query.target || defaultTarget, jwt: req.query.jwt}, function(err,html){
+  res.render('login_form', {target: req.query.target || defaultTarget, jwt: req.query.jwt, role: req.query.role || "user"}, function(err,html){
     if (err) {
       log.error('Error rendering view',err);
       res.status(500);
@@ -64,7 +64,7 @@ app.post('/submit', function(req, res) {
   var target = req.body.target;
   console.log("target: " + target);
 
-  var payload = { role: req.query.role || "user" };
+  var payload = { role: req.body.role };
   if (orig_jwt != "") {
     // If the token is valid or expired then augment the paylod with info from the old token.
     jwt.verify(orig_jwt, secret, function(err, decoded) {
