@@ -20,7 +20,7 @@
           <div id="authResponseSuccess" class="layout horizontal outer-container" hidden>
             <div class="layout vertical flex container">
               <p>
-                <span><a href="[[redirectTo]]?jwt=[[jwt]]">Go</a></span>
+                <span><a href="[[target]]?jwt=[[jwt]]">Go</a></span>
             </div>
           </div>
 
@@ -35,7 +35,7 @@
             on-iron-form-response="authResponseHandler"
             on-iron-form-error="displayAuthError"
             >
-            <input type="hidden" name="redirectTo" value="{{redirectTo}}">
+            <input type="hidden" name="target" value="{{target}}">
             <input type="hidden" name="jwt" value="{{jwt}}">
             <div class="layout horizontal flex container">
               <paper-input id="emailInput" class="flex" type="email" name="email" label="Email" required autofocus></paper-input>
@@ -56,7 +56,7 @@
       glgLogin.authResponseHandler = function(evt) {
         console.log(evt);
         glgLogin.jwt = evt.detail.__data__.response.jwt;
-        glgLogin.redirectTo = evt.detail.__data__.response.redirectTo;
+        glgLogin.target = evt.detail.__data__.response.target;
         glgLogin.$.authResponseSuccess.removeAttribute('hidden');
       }
 

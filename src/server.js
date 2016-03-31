@@ -44,7 +44,7 @@ app.use('/favicon.ico', express.static('favicon.ico'));
 
 // route "/": Get the form
 app.get('/', function(req, res) {
-  res.render('login_form', {target: req.query.redirectTo || defaultTarget, jwt: req.query.jwt}, function(err,html){
+  res.render('login_form', {target: req.query.target || defaultTarget, jwt: req.query.jwt}, function(err,html){
     if (err) {
       log.error('Error rendering view',err);
       res.status(500);
@@ -61,8 +61,8 @@ app.post('/submit', function(req, res) {
   console.log("submit");
   // capture form input
   var orig_jwt = req.body.jwt;
-  var target = req.body.redirectTo;
-  console.log("target: " + redirectTo);
+  var target = req.body.target;
+  console.log("target: " + target);
 
   var payload = { role: req.query.role || "user" };
   if (orig_jwt != "") {
@@ -83,7 +83,7 @@ app.post('/submit', function(req, res) {
 
 var signAndComplete = function(target, res, payload) {
   console.log("signAndComplete");
-  var target = redirectTo;
+  var target = target;
   jwt.sign(payload, secret, {algorithm: "HS256", expiresIn: "1h"}, function(new_jwt) {
     completeAuth(target, res, true, new_jwt);
   });
@@ -91,7 +91,7 @@ var signAndComplete = function(target, res, payload) {
 
 var completeAuth = function(target, res, isAuthenticated, jwt) {
   console.log("completeAuth");
-  res_body = {status: isAuthenticated ? 'success' : 'error', jwt: jwt, target: redirectTo}
+  res_body = {status: isAuthenticated ? 'success' : 'error', jwt: jwt, target: target}
   res.writeHead(200, {"Content-Type": "application/json"});
   res.write(JSON.stringify(res_body));
   res.send();
