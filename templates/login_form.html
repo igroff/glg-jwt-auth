@@ -35,11 +35,11 @@
             on-iron-form-response="authResponseHandler"
             on-iron-form-error="displayAuthError"
             >
-            <input type="hidden" name="target" value="{{target}}">
             <input type="hidden" name="jwt" value="{{jwt}}">
-            <input type="hidden" name="role" value="{{role}}">
-            <div class="layout horizontal flex container">
-              <paper-input id="emailInput" class="flex" type="email" name="email" label="Email" required autofocus></paper-input>
+            <div class="layout vertical flex container">
+              <paper-input id="emailInput" class="flex" type="email" name="email" label="Email" required autofocus value="test@pants.com"></paper-input>
+              <paper-input type="input" name="role" value="{{role}}" class="flex" label="Role"></paper-input>
+              <paper-input type="input" name="target" value="{{target}}" class="flex" label="Redirect To"></paper-input>
               <paper-button noink on-click="authMe">Log In</paper-button>
             </div>
           </form>
